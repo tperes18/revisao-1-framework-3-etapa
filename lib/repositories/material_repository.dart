@@ -14,23 +14,52 @@ class MaterialRepository {
   }
 
   Future<bool> existeNome(String nome, {int? ignorarId}) async {
-    // TODO 4: consulte o nome normalizado no banco.
+    // (BLE) TODO 4: consulte o nome normalizado no banco.
     // Quando ignorarId for informado, exclua esse ID da busca de duplicidade.
-    return false;
+        final db = await service.database;
+
+    final nomeNormalizado = nome.trim().toLowerCase();
+
+    final resultado = await db.query(
+      'materiais',
+      where: ignorarId == null
+          ? 'nome_normalizado = ?'
+          : 'nome_normalizado = ? AND id <> ?',
+      whereArgs: ignorarId == null
+          ? [nomeNormalizado]
+          : [nomeNormalizado, ignorarId],
+    );
+
+    return resultado.isNotEmpty;
   }
 
   Future<void> inserir(MaterialEvento material) async {
-    // TODO 5: Insira material.toMap() na tabela materiais.
-    throw UnimplementedError();
+    // (BLE) TODO 5: Insira material.toMap() na tabela materiais.
+    final db = await service.database;
+
+    await db.insert('materiais', material.toMap());
   }
 
   Future<void> atualizar(MaterialEvento material) async {
-    // TODO 6: Atualize somente o registro cujo ID está em material.id.
-    throw UnimplementedError();
+    // (BLE) TODO 6: Atualize somente o registro cujo ID está em material.id.
+    final db = await service.database;
+
+    await db.update(
+      'materiais',
+      material.toMap(),
+      where: 'id = ?',
+      whereArgs: [material.id],
+    );
   }
 
   Future<void> excluir(int id) async {
-    // TODO 7: Exclua somente o registro cujo ID foi recebido.
-    throw UnimplementedError();
+    // (BLE) TODO 7: Exclua somente o registro cujo ID foi recebido.
+    final db = await service.database;
+
+    await db.delete(
+      'materiais',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
   }
 }

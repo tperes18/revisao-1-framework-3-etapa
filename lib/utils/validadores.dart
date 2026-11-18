@@ -14,8 +14,8 @@ class Validadores {
     final int? quantidade = int.tryParse(valor); // [esta linha foi adicionada]
 
     if (quantidade == null) return 'Informe um número inteiro'; // [esta linha foi adicionada]
-
     if (quantidade < 0) return 'Informe um valor maior ou igual a zero'; // [esta linha foi adicionada]
+    
     return null;
   }
 }
